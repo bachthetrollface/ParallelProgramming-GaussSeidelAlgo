@@ -9,9 +9,8 @@ def generate_system(n:int):
     rng = rd.default_rng()
     A = rng.uniform(-10, 10, size=(n,n))
     for i in range(n):
-        A[i,i] = np.sum(np.abs(A[i])) + rng.uniform(1, 5)
+        A[i,i] = np.sum(np.abs(A[i])) - np.abs(A[i,i]) + rng.uniform(1, 5)
         neg = rng.binomial(1, 0.5)
-        print(neg)
         if neg:
             A[i,i] = -A[i,i]
     b = rng.uniform(-50, 50, size=(n,))
@@ -27,7 +26,7 @@ def main():
     As = []
     bs = []
     xs = []
-    num_systems = 10
+    num_systems = 5
     system_size = 50
     count = 0
     while count < num_systems:
@@ -44,10 +43,10 @@ def main():
     
     # save systems to file
     for i in range(num_systems):
-        print(f"System no. {i+1}:")
-        print("A: ", As[i])
-        print("b: ", bs[i])
-        print("x: ", xs[i])
+        # print(f"System no. {i+1}:")
+        # print("A: ", As[i])
+        # print("b: ", bs[i])
+        # print("x: ", xs[i])
         with open(f"data/system_{i+1}_size{system_size}.txt", "w") as f:
             f.write(f"{system_size}")
             f.write("\n")
@@ -57,7 +56,7 @@ def main():
             f.write(" ".join([str(j) for j in bs[i]]))
             f.write("\n")
             f.write(" ".join([str(j) for j in xs[i]]))
-        print()
+        # print()
     
 
 if __name__ == '__main__':
