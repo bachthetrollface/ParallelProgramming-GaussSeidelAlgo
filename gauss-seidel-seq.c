@@ -6,7 +6,7 @@
 // #define N 5
 #define ERR 0.000001
 #define MAX_ITER 100
-#define FILENAME "data/system_5_size50.txt"
+#define FILENAME "data/system_2_size5.txt"
 
 /* 
     use element-based formula of Gauss-Seidel algorithm
@@ -60,14 +60,14 @@ int main() {
         *(x+i) = 0;
     }
 
-    printf("Matrix A:\n");
-    display_matrix(A, N, N);
-    printf("Vector b:\n");
-    display_vector(b, N);
-    printf("\nSolution:\n");
-    display_vector(solution,N);
-    printf("\nInitial Solution:\n");
-    display_vector(x,N);
+    // printf("Matrix A:\n");
+    // display_matrix(A, N, N);
+    // printf("Vector b:\n");
+    // display_vector(b, N);
+    // printf("\nSolution:\n");
+    // display_vector(solution,N);
+    // printf("\nInitial Solution:\n");
+    // display_vector(x,N);
 
     clock_t begin, end;
     begin = clock();
@@ -93,9 +93,20 @@ int main() {
     }
     end = clock();
     double run_time = (double) (end-begin)/CLOCKS_PER_SEC;
+
+    float diff = 0;
+    for (i = 0; i < N; i++) {
+        diff += fabs(*(x+i) - *(solution+i));
+    }
+    diff /= N;
     
     printf("\nApproximate solution after %d iterations:\n", iter);
     display_vector(x,N);
+    if (diff < ERR) {
+        printf("\nApproximation accepted with average error < %.6f.", ERR);
+    } else {
+        printf("\nApproximation not accpeted with average error = %.6f", diff);
+    }
     printf("\nTotal running time: %f", run_time);
     free(A);
     free(b);
