@@ -6,7 +6,7 @@
 // #define N 5
 #define ERR 0.000001
 #define MAX_ITER 100
-#define FILENAME "data/system_2_size5.txt"
+#define FILENAME "data/system_2_size500.txt"
 
 /* 
     use element-based formula of Gauss-Seidel algorithm
@@ -62,32 +62,35 @@ int main() {
 
     // printf("Matrix A:\n");
     // display_matrix(A, N, N);
+
     // printf("Vector b:\n");
     // display_vector(b, N);
+
     // printf("\nSolution:\n");
     // display_vector(solution,N);
+
     // printf("\nInitial Solution:\n");
     // display_vector(x,N);
 
     clock_t begin, end;
     begin = clock();
     int iter = 0;
-    float max_err = 999, sum_before, sum_after, tmp, cur_err;
+    float max_err = 999, sum_before, sum_after, new_solution, cur_err;
     for (iter = 1; iter <= MAX_ITER; iter++) {
         max_err = 0;
         for (i = 0; i < N; i++) {
-            // sum_before = sum_after = 0;
-            // for (j = 0; j < i; j++) sum_before += (*(A+i*N+j) * *(x+j));
-            // for (j = i+1; j < N; j++) sum_after += (*(A+i*N+j) * *(x+j));
-            // tmp = (*(b+i) - sum_before - sum_after) / *(A+i*N+i);
+            sum_before = sum_after = 0;
+            for (j = 0; j < i; j++) sum_before += (*(A+i*N+j) * *(x+j));
+            for (j = i+1; j < N; j++) sum_after += (*(A+i*N+j) * *(x+j));
+            new_solution = (*(b+i) - sum_before - sum_after) / *(A+i*N+i);
 
-            tmp = *(b+i);
-            for (j = 0; j < N; j++) if (j != i) tmp -= (*(A+i*N+j) * *(x+j));
-            tmp /= *(A+i*N+i);
+            // tmp = *(b+i);
+            // for (j = 0; j < N; j++) if (j != i) tmp -= (*(A+i*N+j) * *(x+j));
+            // tmp /= *(A+i*N+i);
             
-            cur_err = fabs(tmp - *(x+i));
+            cur_err = fabs(new_solution - *(x+i));
             if (cur_err > max_err) max_err = cur_err;
-            *(x+i) = tmp;
+            *(x+i) = new_solution;
         }
         if (max_err <= ERR) break;
     }
@@ -100,8 +103,13 @@ int main() {
     }
     diff /= N;
     
-    printf("\nApproximate solution after %d iterations:\n", iter);
-    display_vector(x,N);
+    // printf("\nApproximate solution after %d iterations:\n", iter);
+    // display_vector(x,N);
+    if (iter <= MAX_ITER) {
+        printf("\nAlgorithm converged after %d iterations.", iter);
+    } else {
+        printf("\nAlgorithm failed to converge after %d iterations.", MAX_ITER);
+    }
     if (diff < ERR) {
         printf("\nApproximation accepted with average error < %.6f.", ERR);
     } else {
@@ -111,4 +119,6 @@ int main() {
     free(A);
     free(b);
     free(x);
+    free(solution);
+    return 0;
 }
