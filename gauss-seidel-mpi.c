@@ -7,7 +7,7 @@
 // #define N 5
 #define ERR 0.000001
 #define MAX_ITER 100
-#define FILENAME "data/system_4_size100.txt"
+#define FILENAME "data/system_1_size1000.txt"
 
 /* 
     use element-based formula of Gauss-Seidel algorithm
@@ -101,6 +101,8 @@ int main(int argc, char* argv[]) {
         start = rank * domain_len + remainder;
         stop = start + domain_len;
     }
+
+    // check for empty domain -> end process early
 
     x = (float*)malloc(N*sizeof(float));
     // xs = (float*)malloc((stop-start)*sizeof(float));
@@ -203,7 +205,7 @@ int main(int argc, char* argv[]) {
             printf("\nAlgorithm failed to converge after %d iterations.", MAX_ITER);
         }
         if (diff < ERR) {
-            printf("\nApproximation accepted with average error < %.6f.", ERR);
+            printf("\nApproximation accepted with average error = %.10f < %.6f.", diff, ERR);
         } else {
             printf("\nApproximation not accpeted with average error = %.6f", diff);
         }

@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.random as rd
+import argparse
 
 def generate_system(n:int):
     '''Generate system of linear equations Ax=b with n variables'''
@@ -23,11 +24,16 @@ def generate_system(n:int):
     return A, b, x
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--system_size", default=5)
+    parser.add_argument("--num_systems", default=1)
+    opt = parser.parse_args()
+    
     As = []
     bs = []
     xs = []
-    num_systems = 5
-    system_size = 50
+    num_systems = int(opt.num_systems)
+    system_size = int(opt.system_size)
     count = 0
     while count < num_systems:
         try:
